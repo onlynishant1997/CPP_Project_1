@@ -5,13 +5,6 @@ This is the starter code for the Route Planning project. Instructions for each e
 ## Cloning
 
 When cloning this project, be sure to use the `--recurse-submodules` flag. Using HTTPS:
-```
-git clone https://github.com/arda-a/OpenStreetMap-Route-Planner.git --recurse-submodules
-```
-or with SSH:
-```
-git clone git@github.com/arda-a/OpenStreetMap-Route-Planner.git --recurse-submodules
-```
 
 ## Compiling and Running
 
