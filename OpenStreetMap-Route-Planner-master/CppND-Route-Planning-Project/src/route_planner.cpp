@@ -68,19 +68,23 @@ RouteModel::Node* RoutePlanner::NextNode()
 //   of the vector, the end node should be the last element.
 std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node * current_node)
 {
-  std::vector<RouteModel::Node> path_found;
-  distance = 0.0f;
+       // Create path_found vector
+    distance = 0.0f;
+    std::vector<RouteModel::Node> path_found;
+    // TODO: Implement your solution here.
+      while (current_node != start_node) 
+    {
+      path_found.push_back(*current_node);
+      distance += current_node->distance(*current_node->parent);
+      current_node = current_node->parent;
 
-  while (current_node->parent != nullptr) {
-    path_found.push_back(*current_node);
-    auto parent = *(current_node->parent);
-    distance += current_node->distance(parent);
-    current_node = current_node->parent;
-  }
+    }
+    path_found.push_back(*current_node); 
+      std::reverse(path_found.begin(), path_found.end()); // need to reverse as the path should have the starting node in the beginning
 
-  path_found.push_back(*current_node);
-  distance *= m_Model.MetricScale();
-  return path_found;
+    distance *= m_Model.MetricScale(); // Multiply the distance by the scale of the map to get meters.
+    return path_found;
+
 }
 
 
@@ -92,18 +96,20 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
 // - Store the final path in the m_Model.path attribute before the method exits. This path will then be displayed on the map tile.
 void RoutePlanner::AStarSearch()
 {
-  start_node->visited = true;
-  open_list.push_back(start_node);
-  RouteModel::Node* current_node = nullptr;
+  start_node->visited = true;    
+    open_list.push_back(start_node);
+RouteModel::Node * current_node;
+    while(open_list.size() > 0)
+    {
+          current_node = NextNode();
+          AddNeighbors(current_node);
 
-  while (open_list.size() > 0) {
-    current_node = NextNode();
-    if (current_node->distance(*end_node) == 0) {
-      m_Model.path = ConstructFinalPath(current_node);
-      return;
+
+          if (current_node == end_node)
+          {
+               m_Model.path = ConstructFinalPath(current_node);
+              return;
+          }
+
     }
-    else {
-      AddNeighbors(current_node);
-    }
-  }
 }
